@@ -25,7 +25,7 @@ function sumaDecimal(...args) {
     });
     res = res / multiplicador;
   }
-  return res;
+  return res.toFixed(2);
 }
 
 
@@ -182,10 +182,14 @@ function updateCart() {
   const cartList = document.getElementById("cart");
   cartList.innerHTML = "";
 
+  
+
   for (const [id, item] of Object.entries(cart)) {
     const listItem = document.createElement("li");
 
-    listItem.textContent = `${item.title} - ${item.quantity} x ${item.price}$`;
+    let cantidad = item.price * item.quantity;
+
+    listItem.textContent = `${item.title} x ${item.quantity} - ${cantidad.toFixed(2)}$`;
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "Quitar";
@@ -202,6 +206,7 @@ function getTotalPrice() {
     if (Object.hasOwnProperty.call(cart, id)) {
       const element = cart[id];
       totalPrice = sumaDecimal(totalPrice,cart[id].price * cart[id].quantity);
+      console.log(totalPrice);
       // totalPrice += cart[id].price * cart[id].quantity;
     }
   }
