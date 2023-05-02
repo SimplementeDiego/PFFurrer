@@ -184,9 +184,8 @@ function updateCart() {
 
   for (const [id, item] of Object.entries(cart)) {
     const listItem = document.createElement("li");
-    listItem.textContent = `${item.title} x ${item.quantity} - $${
-      item.price * item.quantity
-    }`;
+
+    listItem.textContent = `${item.title} - ${item.quantity} x ${item.price}$`;
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "Quitar";
