@@ -2,6 +2,7 @@ const productsContainer = document.getElementById("products-container");
 const inputBuscar = document.getElementById("buscar");
 const sumaTotal = document.getElementById("resultado");
 const cantidadTotal = document.getElementById("cantidad");
+const numeroCarrito = document.getElementById("numeroCarrito");
 
 let cantidadCarrito = 0;
 
@@ -211,6 +212,7 @@ function getTotalPrice() {
     }
   }
   cantidadTotal.innerHTML = cantidadCarrito;
+  numeroCarrito.innerHTML = cantidadCarrito;
   sumaTotal.innerHTML = totalPrice;
 }
 
@@ -218,3 +220,5 @@ function toggleBox() {
   const boxContent = document.querySelector('.box-content');
   boxContent.style.display = (boxContent.style.display === 'none') ? 'block' : 'none';
 }
+
+
