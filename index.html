@@ -11,13 +11,13 @@
     <header>
       <nav class="navbar">
         <div class="navbar-brand">
-          <a href="#" class="navbar-logo" onclick="reset()">
+          <a href="#" class="navbar-logo">
             <img src="./images/img2.avif" alt="Logo" class="navbar-logo-img" />
           </a>
         </div>
         <ul class="navbar-menu">
           <li class="navbar-item">
-            <a href="#" class="navbar-link" onclick="reset()">Home</a>
+            <a href="#" class="navbar-link">Home</a>
           </li>
           <li class="navbar-item">
             <a href="#" class="navbar-link">Shop</a>
@@ -38,32 +38,12 @@
       </nav>
     </header>
     <main>
-      <div class="box" onclick="toggleBox()">Click para ver las implementaciones
-        <div class="box-content">
-          Implementaciones (Esto no va a estar presente en el producto final)
-          <div>1- Utilizo getElementById para recuperar elementos del HTML</div>
-          <div>2- Utilizo un fetch para recuperar productos de FakeStoreApi en un array</div>
-          <div>3- Muestro estos productos en "cards"</div>
-          <div>4- Implementado el buscar productos por titulo (dando al boton buscar o dando enter)</div>
-          <div>5- Si se da click en "New Collection" deberia mostrar los items pares</div>
-          <div>6- Si se da click en "Check Sales" deberia mostrar los items impares</div>
-          <div>7- Implementado la posibilidad de agregar items al carrito</div>  
-          <div>8- Implementado la posibilidad de eliminar items del carrito</div>
-          <div>9- Implementado un div que muestra los items del carrito, su cantidad y la suma total</div>
-          <div>10- Implementada una funcion que soluciona el problema instrinseco de las sumas de decimales con JavaScript</div>
-        </div>
-      </div>
-      <div class="carrito">
-        <h1>Carrito</h1>
-        <ul id="cart"></ul>
-        <div>El total de los <span id="cantidad">0</span> items del carrito es: <span id="resultado">0</span>$</div>
-      </div>
-
+    
       <div class="container-primer-main">
-        <a class="primer-main-izq" href="#" onclick="collection()">
+        <a class="primer-main-izq" href="#">
           ¡New Collection!
         </a>
-        <a class="primer-main-der" href="#" onclick="sales()">
+        <a class="primer-main-der" href="#">
           ¡Check Sales!
         </a>
       </div>
@@ -71,7 +51,7 @@
       <div class="container-filtros">
         <div class="filtros">
           <input type="text" class="input-filtro" id="buscar" />
-          <button class="button-filtro" onclick="buscar()">Buscar</button>
+          <button class="button-filtro">Buscar</button>
         </div>
       </div>
 
