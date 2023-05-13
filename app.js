@@ -1,144 +1,292 @@
-// Definir la lista de productos
-let productos = [
-  { nombre: "Camiseta", categoria: "Ropa", precio: 20 },
-  { nombre: "Pantalón", categoria: "Ropa", precio: 40 },
-  { nombre: "Zapatillas", categoria: "Calzado", precio: 50 },
-  { nombre: "Botas", categoria: "Calzado", precio: 70 },
-  { nombre: "Mesa", categoria: "Muebles", precio: 100 },
-  { nombre: "Silla", categoria: "Muebles", precio: 50 },
-  { nombre: "Cafetera", categoria: "Electrodomésticos", precio: 80 },
-  { nombre: "Batidora", categoria: "Electrodomésticos", precio: 60 },
-  { nombre: "Libro", categoria: "Libros", precio: 15 },
-  { nombre: "Disco", categoria: "Música", precio: 10 },
-];
+const productsContainer = document.getElementById("products-container");
+const inputBuscar = document.getElementById("buscar");
+const sumaTotal = document.getElementById("resultado");
+const cantidadTotal = document.getElementById("cantidad");
+const numeroCarrito = document.getElementById("numeroCarrito");
 
-// Función para agregar un producto al carrito
-function agregarAlCarrito(carrito, producto) {
-  carrito.push(producto);
-  alert(`"${producto.nombre}" agregado al carrito.`);
-}
-
-// Función para calcular el precio total del carrito
-function calcularTotal(carrito) {
-  let total = 0;
-  for (let producto of carrito) {
-    total += producto.precio;
+inputBuscar.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    buscar();
   }
-  return total;
-}
+});
 
-// Función para mostrar la lista de productos
-function mostrarListaProductos() {
-  let lista = "Lista de productos disponibles:\n";
-  for (let producto of productos) {
-    lista += `- ${producto.nombre} (${producto.categoria}): $${producto.precio}\n`;
+function sumaDecimal(...args) {
+  let res = 0;
+  if (args.length > 0) {
+    let arrDecimales = [];
+    args.forEach((element) => {
+      const decimales = (element.toString().split(".")[1] || "").length || 0;
+      arrDecimales.push(decimales);
+    });
+    const multiplicador = Math.pow(10, Math.max(...arrDecimales));
+    args.forEach((element) => {
+      res += element * multiplicador;
+    });
+    res = res / multiplicador;
   }
-  alert(lista);
+  return res.toFixed(2);
 }
 
-// Función para mostrar las categorías de productos
-function mostrarCategorias() {
-  let categorias = {};
-  for (let producto of productos) {
-    if (!(producto.categoria in categorias)) {
-      categorias[producto.categoria] = [];
+const apiUrl = "https://fakestoreapi.com/products";
+const products = [];
+const primeraMitad = [];
+const segundaMitad = [];
+
+fetch(apiUrl)
+  .then((response) => response.json())
+  .then((data) => {
+    for (let i = 0; i < 20; i++) {
+      if (i % 2 == 0) {
+        primeraMitad.push(data[i]);
+      } else {
+        segundaMitad.push(data[i]);
+      }
+      products.push(data[i]);
     }
-    categorias[producto.categoria].push(producto);
-  }
-  let lista = "Categorías de productos disponibles:\n";
-  for (let categoria in categorias) {
-    lista += `- ${categoria}:\n`;
-    for (let producto of categorias[categoria]) {
-      lista += `  - ${producto.nombre}: $${producto.precio}\n`;
-    }
-  }
-  alert(lista);
+    data.forEach((product) => {
+      const productDiv = document.createElement("div");
+      productDiv.classList.add("item");
+      productDiv.innerHTML = `
+              <h2>${product.title}</h2>
+              <img src="${product.image}" alt="${product.title}">
+              <p>Price: $${product.price}</p>
+            `;
+
+      const addButton = document.createElement("button");
+      addButton.textContent = "Agregar al carro";
+      addButton.addEventListener("click", () => addToCart(product));
+      productDiv.appendChild(addButton);
+
+      productsContainer.appendChild(productDiv);
+    });
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
+
+function buscar() {
+  const desc = inputBuscar.value.trim().toLowerCase();
+  fetch("https://fakestoreapi.com/products")
+    .then((response) => response.json())
+    .then((data) => {
+      const filteredData = data.filter((item) =>
+        item.title.toLowerCase().includes(desc)
+      );
+      productsContainer.innerHTML = "";
+      filteredData.forEach((product) => {
+        const productDiv = document.createElement("div");
+        productDiv.classList.add("item");
+        productDiv.innerHTML = `
+        <h2>${product.title}</h2>
+        <img src="${product.image}" alt="${product.title}">
+        <p>Price: $${product.price}</p>
+      `;
+        const addButton = document.createElement("button");
+        addButton.textContent = "Agregar al carro";
+        addButton.addEventListener("click", () => addToCart(product));
+        productDiv.appendChild(addButton);
+        productsContainer.appendChild(productDiv);
+      });
+    })
+    .catch((error) => console.error(error));
 }
 
-// Función para buscar un producto por nombre
-function buscarProductoPorNombre(nombre) {
-  return productos.find(producto => producto.nombre.toLowerCase() === nombre.toLowerCase());
+function reset() {
+  productsContainer.innerHTML = "";
+  products.forEach((product) => {
+    const productDiv = document.createElement("div");
+    productDiv.classList.add("item");
+    productDiv.innerHTML = `
+        <h2>${product.title}</h2>
+        <img src="${product.image}" alt="${product.title}">
+        <p>Price: $${product.price}</p>
+      `;
+    const addButton = document.createElement("button");
+    addButton.textContent = "Agregar al carro";
+    addButton.addEventListener("click", () => addToCart(product));
+    productDiv.appendChild(addButton);
+    productsContainer.appendChild(productDiv);
+  });
 }
 
-// Función para mostrar los productos de una categoría
-function mostrarProductosPorCategoria() {
-  let categoria = prompt("Ingrese el nombre de la categoría que desea ver:");
-  let productosCategoria = productos.filter(producto => producto.categoria.toLowerCase() === categoria.toLowerCase());
-  if (productosCategoria.length > 0) {
-    let listaProductos = `Productos en la categoría ${categoria}:\n`;
-    for (let producto of productosCategoria) {
-      listaProductos += `- ${producto.nombre}: $${producto.precio}\n`;
-    }
-    alert(listaProductos);
+function collection() {
+  productsContainer.innerHTML = "";
+  primeraMitad.forEach((product) => {
+    const productDiv = document.createElement("div");
+    productDiv.classList.add("item");
+    productDiv.innerHTML = `
+        <h2>${product.title}</h2>
+        <img src="${product.image}" alt="${product.title}">
+        <p>Price: $${product.price}</p>
+      `;
+    const addButton = document.createElement("button");
+    addButton.textContent = "Agregar al carro";
+    addButton.addEventListener("click", () => addToCart(product));
+    productDiv.appendChild(addButton);
+    productsContainer.appendChild(productDiv);
+  });
+}
+
+function sales() {
+  productsContainer.innerHTML = "";
+  segundaMitad.forEach((product) => {
+    const productDiv = document.createElement("div");
+    productDiv.classList.add("item");
+    productDiv.innerHTML = `
+        <h2>${product.title}</h2>
+        <img src="${product.image}" alt="${product.title}">
+        <p>Price: $${product.price}</p>
+      `;
+    const addButton = document.createElement("button");
+    addButton.textContent = "Agregar al carro";
+    addButton.addEventListener("click", () => addToCart(product));
+    productDiv.appendChild(addButton);
+    productsContainer.appendChild(productDiv);
+  });
+}
+
+let cart = {};
+
+function addToCart(item) {
+  if (cart[item.id]) {
+    cart[item.id].quantity++;
   } else {
-    alert(`No se encontraron productos en la categoría "${categoria}".`);
+    cart[item.id] = { ...item, quantity: 1 };
+  }
+
+  updateCart();
+  getTotalPrice();
+  saveCartToLocalStorage();
+}
+
+function removeFromCart(itemId) {
+  if (cart[itemId]) {
+    cart[itemId].quantity--;
+
+    if (cart[itemId].quantity === 0) {
+      delete cart[itemId];
+    }
+
+    updateCart();
+    getTotalPrice();
+    saveCartToLocalStorage();
   }
 }
 
+function updateCart() {
+  const cartList = document.getElementById("cart");
+  cartList.innerHTML = "";
 
+  for (const [id, item] of Object.entries(cart)) {
+    const listItem = document.createElement("li");
 
-// Función principal para ejecutar el programa
-function ejecutarPrograma() {
-  let carrito = [];
-  let opcion;
-  do {
-    opcion = prompt(`Ingrese una opción:
-      1 - Agregar producto
-      2 - Ver categorías de productos
-      3 - Buscar producto por nombre
-      4 - Buscar productos por categoría
-      5 - Ver carrito
-      6 - Salir`);
-    switch (opcion) {
-      case "1":
-        mostrarListaProductos();
-        let nombreProducto = prompt(
-          "Ingrese el nombre del producto que desea agregar:"
-        );
-        let producto = buscarProductoPorNombre(nombreProducto);
-        if (producto) {
-          agregarAlCarrito(carrito, producto);
-        } else {
-          alert(`No se encontró el producto "${nombreProducto}".`);
-        }
-        break;
-      case "2":
-        mostrarCategorias();
-        break;
-      case "3":
-        let nombreBusqueda = prompt(
-          "Ingrese el nombre del producto que desea buscar:"
-        );
-        let productoBusqueda = buscarProductoPorNombre(nombreBusqueda);
-        if (productoBusqueda) {
-          alert(
-            `Producto encontrado:\n${productoBusqueda.nombre} (${productoBusqueda.categoria}): $${productoBusqueda.precio}`
-          );
-        } else {
-          alert(`No se encontró el producto "${nombreBusqueda}".`);
-        }
-        break;
-      case "4":
-        mostrarProductosPorCategoria();
-        break;
-      case "5":
-        let carritoLista = "Carrito:\n";
-        for (let producto of carrito) {
-          carritoLista += `- ${producto.nombre}: $${producto.precio}\n`;
-        }
-        let total = calcularTotal(carrito);
-        carritoLista += `Total: $${total}`;
-        alert(carritoLista);
-        break;
-      case "6":
-        alert("¡Hasta luego!");
-        break;
-      default:
-        alert("Opción inválida. Intente de nuevo.");
-        break;
-    }
-  } while (opcion !== "6");
+    let cantidad = item.price * item.quantity;
+
+    listItem.textContent = `${item.title} x ${
+      item.quantity
+    } - ${cantidad.toFixed(2)}$`;
+
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Quitar";
+    removeButton.addEventListener("click", () => removeFromCart(id));
+
+    listItem.appendChild(removeButton);
+    cartList.appendChild(listItem);
+  }
 }
 
-// Ejecutar el programa
-ejecutarPrograma();
+function getCartItemCount() {
+  let itemCount = 0;
+
+  for (const item of Object.values(cart)) {
+    itemCount += item.quantity;
+  }
+
+  return itemCount;
+}
+
+function getTotalPrice() {
+  let totalPrice = 0;
+  for (const id in cart) {
+    if (Object.hasOwnProperty.call(cart, id)) {
+      const element = cart[id];
+      totalPrice = sumaDecimal(totalPrice, cart[id].price * cart[id].quantity);
+    }
+  }
+  cantidadTotal.innerHTML = getCartItemCount();
+  numeroCarrito.innerHTML = getCartItemCount();
+  sumaTotal.innerHTML = totalPrice;
+}
+
+function toggleBox() {
+  const boxContent = document.querySelector(".box-content");
+  boxContent.style.display =
+    boxContent.style.display === "none" ? "block" : "none";
+}
+
+function saveCartToLocalStorage() {
+  const cartJSON = JSON.stringify(cart);
+  localStorage.setItem("cart", cartJSON);
+}
+
+function restoreCartFromLocalStorage() {
+  const cartJSON = localStorage.getItem("cart");
+  if (cartJSON) {
+    cart = JSON.parse(cartJSON);
+    updateCart();
+    console.log("antes");
+    getTotalPrice();
+    console.log("despues");
+  }
+}
+
+function clearCart() {
+  cart = {}; // Vaciar el carrito
+
+  // Eliminar el carrito del local storage
+  localStorage.removeItem("cart");
+
+  updateCart();
+  getTotalPrice();
+}
+
+function confirmClearCart() {
+  if (getCartItemCount() > 0) {
+    // Obtener el elemento del modal
+    const modal = document.getElementById("confirmModal");
+
+    // Mostrar el modal
+    modal.style.display = "block";
+
+    // Obtener los elementos de los botones de confirmación
+    const confirmButton = document.getElementById("confirmButton");
+    const cancelButton = document.getElementById("cancelButton");
+
+    // Agregar eventos de clic a los botones de confirmación
+    confirmButton.addEventListener("click", handleConfirmClearCart);
+    cancelButton.addEventListener("click", handleCancelClearCart);
+
+    // Función para manejar el clic en el botón de confirmación
+    function handleConfirmClearCart() {
+      clearCart(); // Vaciar el carrito
+      closeModal(); // Cerrar el modal
+    }
+
+    // Función para manejar el clic en el botón de cancelar
+    function handleCancelClearCart() {
+      closeModal(); // Cerrar el modal
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+      // Ocultar el modal
+      modal.style.display = "none";
+
+      // Eliminar los eventos de clic de los botones de confirmación
+      confirmButton.removeEventListener("click", handleConfirmClearCart);
+      cancelButton.removeEventListener("click", handleCancelClearCart);
+    }
+  }
+}
+
+restoreCartFromLocalStorage();
