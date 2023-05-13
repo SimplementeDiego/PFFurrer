@@ -4,6 +4,9 @@ const inputBuscar = document.getElementById("buscar");
 const sumaTotal = document.getElementById("resultado");
 const cantidadTotal = document.getElementById("cantidad");
 const numeroCarrito = document.getElementById("numeroCarrito");
+const confirmButton = document.getElementById("confirmButton");
+const cancelButton = document.getElementById("cancelButton");
+const modal = document.getElementById("confirmModal");
 
 
 //Creo variables
@@ -15,12 +18,6 @@ let cart = {};
 
 
 //Acciones independientes
-inputBuscar.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    buscar();
-  }
-});
-
 fetch(apiUrl)
   .then((response) => response.json())
   .then((data) => {
@@ -257,35 +254,33 @@ function clearCart() {
   getTotalPrice();
 }
 
+function closeModal() {
+  modal.style.display = "none";
+}
+
+function handleConfirmClearCart() {
+  clearCart();
+  closeModal();
+}
+
+function handleCancelClearCart() {
+  closeModal();
+}
+
 function confirmClearCart() {
   if (getCartItemCount() > 0) {
-    const modal = document.getElementById("confirmModal");
-
     modal.style.display = "block";
-
-    const confirmButton = document.getElementById("confirmButton");
-    const cancelButton = document.getElementById("cancelButton");
-
-    confirmButton.addEventListener("click", handleConfirmClearCart);
-    cancelButton.addEventListener("click", handleCancelClearCart);
-
-    function handleConfirmClearCart() {
-      clearCart();
-      closeModal();
-    }
-
-    function handleCancelClearCart() {
-      closeModal();
-    }
-
-    function closeModal() {
-      modal.style.display = "none";
-
-      confirmButton.removeEventListener("click", handleConfirmClearCart);
-      cancelButton.removeEventListener("click", handleCancelClearCart);
-    }
   }
 }
+
+//Añadir eventos
+inputBuscar.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    buscar();
+  }
+});
+confirmButton.addEventListener("click", handleConfirmClearCart);
+cancelButton.addEventListener("click", handleCancelClearCart);
 
 //Ejecutar al inicio
 restoreCartFromLocalStorage();
