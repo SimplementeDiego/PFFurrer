@@ -69,6 +69,7 @@ header {
 .navbar-cart {
   display: flex;
   align-items: center;
+  margin-left: 10px;
 }
 
 .navbar-cart-link {
@@ -77,6 +78,7 @@ header {
   text-decoration: none;
   font-size: 24px;
   color: #333;
+  border-radius: 15px;
 }
 
 .navbar-cart-link:hover {
@@ -89,7 +91,6 @@ header {
   justify-content: center;
   width: 30px;
   height: 30px;
-  margin-left: 10px;
   border-radius: 50%;
   background-color: #ff4d4d;
   color: #fff;
@@ -172,21 +173,21 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 250px;
-  height: 300px;
+  width: 350px;
+  height: 400px;
   margin: 20px;
-  padding: 20px 0 20px 0;
+  padding: 20px 5px 20px 5px;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background-color: #f5f5f5;
+  background-color: white;
   text-align: center;
   overflow: hidden;
   cursor: pointer;
 }
 
 .item:hover {
-  z-index: 3;
+  z-index: 1;
   animation-name: scale;
   animation-duration: 1s;
   animation-fill-mode: forwards;
@@ -202,8 +203,8 @@ main {
 }
 
 .item img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
   margin-bottom: 20px;
 }
@@ -223,31 +224,7 @@ main {
   padding: 2px;
 }
 
-.carrito{
-  background-color: beige;
-  width: fit-content;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px;
-  min-width: 80%;
-  margin: auto;
-  margin-top: 20px;
-}
 
-.carrito li{
-  list-style-type: none;
-}
-
-.carrito li button{
-  margin-left: 10px;
-  padding: 2px;
-}
-
-.carrito div{
-  margin-top: 20px;
-}
 
 .box {
   width: fit-content;
@@ -267,7 +244,7 @@ main {
   padding: 10px;
 }
 
-#vaciar{
+.botonModal{
   max-width: 100px;
   min-width: fit-content;
   padding: 5px 10px 5px 10px;
@@ -278,7 +255,7 @@ main {
 .modal {
   display: none; /* Por defecto, ocultar el modal */
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -300,4 +277,92 @@ main {
 .modal-button {
   margin: 10px;
   padding: 5px 10px;
+}
+
+.modalCarrito-content {
+  display: none; /* Por defecto, ocultar el modal */
+  position: absolute;
+  z-index: 2;
+  right: 20px;
+  top: 80px;
+  overflow: auto;
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 400px;
+  height: fit-content;
+  text-align: center;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.carrito{
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  border-radius: 10px;
+  min-width: 80%;
+  margin: auto;
+}
+
+.carrito li{
+  list-style-type: none;
+}
+
+.carrito div{
+  margin-top: 20px;
+}
+
+.carrito ul li{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.nombre{
+  display: flex;
+  width: 40%;
+  margin: none;
+}
+
+.precio{
+  display: flex;
+  width: 30%;
+  margin: none;
+}
+
+.carrito ul li button{
+  width: 20%;
+  margin: none;
+  height: 30px;
+}
+
+.carro{
+  margin-right: 5px;
+}
+
+#vaciar{
+  background-color: lightcoral;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#pagar{
+  background-color: lightgreen;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#volver{
+  background-color: lightblue;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
 }

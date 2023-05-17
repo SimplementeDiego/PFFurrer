@@ -7,7 +7,41 @@ const numeroCarrito = document.getElementById("numeroCarrito");
 const confirmButton = document.getElementById("confirmButton");
 const cancelButton = document.getElementById("cancelButton");
 const modal = document.getElementById("confirmModal");
+const modalPay = document.getElementById("payModal");
+const modalCarrito = document.getElementById("modalCarrito");
+const logo = document.getElementById("logo");
+const home = document.getElementById("home");
+const carrito = document.getElementById("carrito");
+const vaciar = document.getElementById("vaciar");
+const volver = document.getElementById("volver");
+const pagar = document.getElementById("pagar");
+const collectionE = document.getElementById("collection");
+const salesE = document.getElementById("sales");
+const buscarBoton = document.getElementById("buscarBoton");
+const confirmarVaciar = document.getElementById("confirmarVaciar");
+const rechazarVaciar = document.getElementById("rechazarVaciar");
+const confirmarComprar = document.getElementById("confirmarComprar");
+const rechazarComprar = document.getElementById("rechazarComprar");
 
+//Añadir eventos
+inputBuscar.addEventListener("keydown", (event) => {
+  if (event.keyCode === 13) {
+    buscar();
+  }
+});
+logo.addEventListener("click", reset);
+home.addEventListener("click", reset);
+carrito.addEventListener("click", toggleCarrito);
+vaciar.addEventListener("click", toggleVaciar);
+volver.addEventListener("click", toggleCarrito);
+pagar.addEventListener("click", toggleCompra);
+collectionE.addEventListener("click", collection);
+salesE.addEventListener("click", sales);
+buscarBoton.addEventListener("click", buscar);
+confirmarVaciar.addEventListener("click", deleteCart);
+rechazarVaciar.addEventListener("click", toggleVaciar);
+confirmarComprar.addEventListener("click", payCart);
+rechazarComprar.addEventListener("click", toggleCompra);
 
 //Creo variables
 const apiUrl = "https://fakestoreapi.com/products";
@@ -15,7 +49,6 @@ const products = [];
 const primeraMitad = [];
 const segundaMitad = [];
 let cart = {};
-
 
 //Acciones independientes
 fetch(apiUrl)
@@ -157,18 +190,30 @@ function updateCart() {
   for (const [id, item] of Object.entries(cart)) {
     const listItem = document.createElement("li");
 
+    const parr = document.createElement("p");
+    parr.classList.add("nombre");
+
+    const precio = document.createElement("p");
+    precio.classList.add("precio");
+
+    const linea = document.createElement("hr");
+
     let cantidad = item.price * item.quantity;
 
-    listItem.textContent = `${item.title} x ${
-      item.quantity
-    } - ${cantidad.toFixed(2)}$`;
+    parr.textContent = `${item.title}`;
+
+    precio.textContent = `x ${item.quantity} = ${cantidad.toFixed(2)}$`;
 
     const removeButton = document.createElement("button");
     removeButton.textContent = "Quitar";
     removeButton.addEventListener("click", () => removeFromCart(id));
 
+    listItem.appendChild(parr);
+    listItem.appendChild(precio);
     listItem.appendChild(removeButton);
+
     cartList.appendChild(listItem);
+    cartList.appendChild(linea);
   }
 }
 
@@ -195,8 +240,7 @@ function getTotalPrice() {
   sumaTotal.innerHTML = totalPrice;
 }
 
-
-
+//Agregar y eliminar
 function addToCart(item) {
   if (cart[item.id]) {
     cart[item.id].quantity++;
@@ -207,6 +251,24 @@ function addToCart(item) {
   updateCart();
   getTotalPrice();
   saveCartToLocalStorage();
+
+  const texto = "Producto agregado. Total de productos: " + getCartItemCount();
+
+  Toastify({
+    text: texto,
+    duration: 3000,
+    destination: "https://github.com/apvarun/toastify-js",
+    newWindow: true,
+    close: true,
+    className: "toast-message",
+    gravity: "bottom", // `top` or `bottom`
+    position: "center", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    style: {
+      borderRadius: "10px",
+    },
+    onClick: function () {}, // Callback after click
+  }).showToast();
 }
 
 function removeFromCart(itemId) {
@@ -223,12 +285,101 @@ function removeFromCart(itemId) {
   }
 }
 
-function toggleBox() {
-  const boxContent = document.querySelector(".box-content");
-  boxContent.style.display =
-    boxContent.style.display === "none" ? "block" : "none";
+//Mostrar carrito
+function toggleCarrito() {
+  modalCarrito.style.display =
+    modalCarrito.style.display === "none" ? "block" : "none";
+  modalCarrito.focus();
 }
 
+//Vaciar
+function clearCart() {
+  if (getCartItemCount() > 0) {
+    cart = {};
+
+    localStorage.removeItem("cart");
+
+    updateCart();
+    getTotalPrice();
+  }
+}
+
+//Eliminar
+function toggleVaciar() {
+  if (getCartItemCount() > 0) {
+    modal.style.display = modal.style.display === "none" ? "block" : "none";
+  }
+}
+
+function confirmClearCart() {
+  if (getCartItemCount() > 0) {
+    modal.style.display = "block";
+  }
+}
+
+function deleteCart() {
+  if (getCartItemCount() > 0) {
+    toggleVaciar();
+    clearCart();
+    const texto = "Carrito vaciado";
+    Toastify({
+      text: texto,
+      duration: 3000,
+      destination: "https://github.com/apvarun/toastify-js",
+      newWindow: true,
+      close: true,
+      className: "toast-message",
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "red",
+        borderRadius: "10px",
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
+  }
+}
+
+//Compra
+function toggleCompra() {
+  if (getCartItemCount() > 0) {
+    modalPay.style.display =
+      modalPay.style.display === "none" ? "block" : "none";
+  }
+}
+
+function confirmPayCart() {
+  if (getCartItemCount() > 0) {
+    modal.style.display = "block";
+  }
+}
+
+function payCart() {
+  if (getCartItemCount() > 0) {
+    toggleCompra(); //cerrar modal
+    clearCart();
+    const texto = "¡COMPRA REALIZADA!";
+    Toastify({
+      text: texto,
+      duration: 3000,
+      destination: "https://github.com/apvarun/toastify-js",
+      newWindow: true,
+      close: true,
+      className: "toast-message",
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "green",
+        borderRadius: "10px",
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
+  }
+}
+
+//Storage
 function saveCartToLocalStorage() {
   const cartJSON = JSON.stringify(cart);
   localStorage.setItem("cart", cartJSON);
@@ -239,48 +390,9 @@ function restoreCartFromLocalStorage() {
   if (cartJSON) {
     cart = JSON.parse(cartJSON);
     updateCart();
-    console.log("antes");
     getTotalPrice();
-    console.log("despues");
   }
 }
-
-function clearCart() {
-  cart = {};
-
-  localStorage.removeItem("cart");
-
-  updateCart();
-  getTotalPrice();
-}
-
-function closeModal() {
-  modal.style.display = "none";
-}
-
-function handleConfirmClearCart() {
-  clearCart();
-  closeModal();
-}
-
-function handleCancelClearCart() {
-  closeModal();
-}
-
-function confirmClearCart() {
-  if (getCartItemCount() > 0) {
-    modal.style.display = "block";
-  }
-}
-
-//Añadir eventos
-inputBuscar.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    buscar();
-  }
-});
-confirmButton.addEventListener("click", handleConfirmClearCart);
-cancelButton.addEventListener("click", handleCancelClearCart);
 
 //Ejecutar al inicio
 restoreCartFromLocalStorage();
