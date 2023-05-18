@@ -44,7 +44,8 @@ confirmarComprar.addEventListener("click", payCart);
 rechazarComprar.addEventListener("click", toggleCompra);
 
 //Creo variables
-const apiUrl = "https://fakestoreapi.com/products";
+const apiUrl = "https://fakestoreapi.com/products"; 
+//const apiUrl = "./data.json"; En caso de que FakeStoreApi no funcione, usar esta linea
 const products = [];
 const primeraMitad = [];
 const segundaMitad = [];
@@ -54,7 +55,7 @@ let cart = {};
 fetch(apiUrl)
   .then((response) => response.json())
   .then((data) => {
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 12; i++) {
       if (i % 2 == 0) {
         primeraMitad.push(data[i]);
       } else {
@@ -83,7 +84,6 @@ fetch(apiUrl)
     console.error("Error fetching data:", error);
   });
 
-
 //Funciones
 function sumaDecimal(...args) {
   let res = 0;
@@ -104,7 +104,7 @@ function sumaDecimal(...args) {
 
 function buscar() {
   const desc = inputBuscar.value.trim().toLowerCase();
-  fetch("https://fakestoreapi.com/products")
+  fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
       const filteredData = data.filter((item) =>
@@ -287,9 +287,13 @@ function removeFromCart(itemId) {
 
 //Mostrar carrito
 function toggleCarrito() {
-  modalCarrito.style.display =
-    modalCarrito.style.display === "none" ? "block" : "none";
-  modalCarrito.focus();
+  if (modalCarrito.classList.contains("class-hide")) {
+    modalCarrito.classList.add("class-show");
+    modalCarrito.classList.remove("class-hide");
+  } else {
+    modalCarrito.classList.add("class-hide");
+    modalCarrito.classList.remove("class-show");
+  }
 }
 
 //Vaciar
@@ -307,7 +311,13 @@ function clearCart() {
 //Eliminar
 function toggleVaciar() {
   if (getCartItemCount() > 0) {
-    modal.style.display = modal.style.display === "none" ? "block" : "none";
+    if (modal.classList.contains("class-hide")) {
+      modal.classList.add("class-show");
+      modal.classList.remove("class-hide");
+    } else {
+      modal.classList.add("class-hide");
+      modal.classList.remove("class-show");
+    }
   }
 }
 
@@ -344,8 +354,13 @@ function deleteCart() {
 //Compra
 function toggleCompra() {
   if (getCartItemCount() > 0) {
-    modalPay.style.display =
-      modalPay.style.display === "none" ? "block" : "none";
+    if (modalPay.classList.contains("class-hide")) {
+      modalPay.classList.add("class-show");
+      modalPay.classList.remove("class-hide");
+    } else {
+      modalPay.classList.add("class-hide");
+      modalPay.classList.remove("class-show");
+    }
   }
 }
 

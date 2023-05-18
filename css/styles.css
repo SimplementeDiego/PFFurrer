@@ -239,10 +239,6 @@ main {
   padding: 5px;
   border-radius: 14px;
 }
-.box-content {
-  display: none;
-  padding: 10px;
-}
 
 .botonModal{
   max-width: 100px;
@@ -253,7 +249,6 @@ main {
 }
 
 .modal {
-  display: none; /* Por defecto, ocultar el modal */
   position: fixed;
   z-index: 2;
   left: 0;
@@ -280,7 +275,6 @@ main {
 }
 
 .modalCarrito-content {
-  display: none; /* Por defecto, ocultar el modal */
   position: absolute;
   z-index: 2;
   right: 20px;
@@ -365,4 +359,12 @@ main {
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
+}
+
+.class-hide{
+  display: none;
+}
+
+.class-show{
+  display: block;
 }
