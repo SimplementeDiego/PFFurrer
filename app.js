@@ -257,7 +257,6 @@ function addToCart(item) {
   Toastify({
     text: texto,
     duration: 3000,
-    destination: "https://github.com/apvarun/toastify-js",
     newWindow: true,
     close: true,
     className: "toast-message",
@@ -335,7 +334,6 @@ function deleteCart() {
     Toastify({
       text: texto,
       duration: 3000,
-      destination: "https://github.com/apvarun/toastify-js",
       newWindow: true,
       close: true,
       className: "toast-message",
@@ -377,8 +375,7 @@ function payCart() {
     const texto = "¡COMPRA REALIZADA!";
     Toastify({
       text: texto,
-      duration: 3000,
-      destination: "https://github.com/apvarun/toastify-js",
+      destination: "#",
       newWindow: true,
       close: true,
       className: "toast-message",
