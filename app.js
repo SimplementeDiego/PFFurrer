@@ -375,7 +375,7 @@ function payCart() {
     const texto = "¡COMPRA REALIZADA!";
     Toastify({
       text: texto,
-      destination: "#",
+      duration: 3000,
       newWindow: true,
       close: true,
       className: "toast-message",
