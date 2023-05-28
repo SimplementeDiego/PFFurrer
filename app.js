@@ -85,7 +85,7 @@ fetch(apiUrl)
   });
 
 //Funciones
-function sumaDecimal(...args) {
+function sumaDecimal(...args) { //Para evitar las sumas de JS que quedan .000000000003
   let res = 0;
   if (args.length > 0) {
     let arrDecimales = [];
@@ -317,12 +317,6 @@ function toggleVaciar() {
       modal.classList.add("class-hide");
       modal.classList.remove("class-show");
     }
-  }
-}
-
-function confirmClearCart() {
-  if (getCartItemCount() > 0) {
-    modal.style.display = "block";
   }
 }
 
