@@ -221,7 +221,15 @@ main {
 }
 
 .item button{
-  padding: 10px;
+  padding: 15px;
+  background-color: rgb(245, 225, 220);
+  border-radius: 5px;
+  border: none;
+  font-size: larger;
+}
+.item button:hover{
+  background-color: rgb(233, 188, 176);
+  cursor: pointer;
 }
 
 

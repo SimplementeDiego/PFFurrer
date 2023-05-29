@@ -356,12 +356,6 @@ function toggleCompra() {
   }
 }
 
-function confirmPayCart() {
-  if (getCartItemCount() > 0) {
-    modal.style.display = "block";
-  }
-}
-
 function payCart() {
   if (getCartItemCount() > 0) {
     toggleCompra(); //cerrar modal
