@@ -24,27 +24,29 @@ const confirmarComprar = document.getElementById("confirmarComprar");
 const rechazarComprar = document.getElementById("rechazarComprar");
 
 //Añadir eventos
-inputBuscar.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    buscar();
-  }
-});
+if (inputBuscar != null) {
+  inputBuscar.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
+      buscar();
+    }
+  });
+  collectionE.addEventListener("click", collection);
+  salesE.addEventListener("click", sales);
+  buscarBoton.addEventListener("click", buscar);
+}
 logo.addEventListener("click", reset);
 home.addEventListener("click", reset);
 carrito.addEventListener("click", toggleCarrito);
 vaciar.addEventListener("click", toggleVaciar);
 volver.addEventListener("click", toggleCarrito);
 pagar.addEventListener("click", toggleCompra);
-collectionE.addEventListener("click", collection);
-salesE.addEventListener("click", sales);
-buscarBoton.addEventListener("click", buscar);
 confirmarVaciar.addEventListener("click", deleteCart);
 rechazarVaciar.addEventListener("click", toggleVaciar);
 confirmarComprar.addEventListener("click", payCart);
 rechazarComprar.addEventListener("click", toggleCompra);
 
 //Creo variables
-const apiUrl = "https://fakestoreapi.com/products"; 
+const apiUrl = "https://fakestoreapi.com/products";
 //const apiUrl = "./data.json"; En caso de que FakeStoreApi no funcione, usar esta linea
 const products = [];
 const primeraMitad = [];
@@ -52,40 +54,43 @@ const segundaMitad = [];
 let cart = {};
 
 //Acciones independientes
-fetch(apiUrl)
-  .then((response) => response.json())
-  .then((data) => {
-    for (let i = 0; i < 20; i++) {
-      if (i % 2 == 0) {
-        primeraMitad.push(data[i]);
-      } else {
-        segundaMitad.push(data[i]);
+if (inputBuscar != null) {
+  fetch(apiUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      for (let i = 0; i < 20; i++) {
+        if (i % 2 == 0) {
+          primeraMitad.push(data[i]);
+        } else {
+          segundaMitad.push(data[i]);
+        }
+        products.push(data[i]);
       }
-      products.push(data[i]);
-    }
-    data.forEach((product) => {
-      const productDiv = document.createElement("div");
-      productDiv.classList.add("item");
-      productDiv.innerHTML = `
+      data.forEach((product) => {
+        const productDiv = document.createElement("div");
+        productDiv.classList.add("item");
+        productDiv.innerHTML = `
               <h2>${product.title}</h2>
               <img src="${product.image}" alt="${product.title}">
               <p>Price: $${product.price}</p>
             `;
 
-      const addButton = document.createElement("button");
-      addButton.textContent = "Agregar al carro";
-      addButton.addEventListener("click", () => addToCart(product));
-      productDiv.appendChild(addButton);
+        const addButton = document.createElement("button");
+        addButton.textContent = "Agregar al carro";
+        addButton.addEventListener("click", () => addToCart(product));
+        productDiv.appendChild(addButton);
 
-      productsContainer.appendChild(productDiv);
+        productsContainer.appendChild(productDiv);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
     });
-  })
-  .catch((error) => {
-    console.error("Error fetching data:", error);
-  });
+}
 
 //Funciones
-function sumaDecimal(...args) { //Para evitar las sumas de JS que quedan .000000000003
+function sumaDecimal(...args) {
+  //Para evitar las sumas de JS que quedan .000000000003
   let res = 0;
   if (args.length > 0) {
     let arrDecimales = [];
