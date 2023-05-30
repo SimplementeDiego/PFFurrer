@@ -33,9 +33,10 @@ if (inputBuscar != null) {
   collectionE.addEventListener("click", collection);
   salesE.addEventListener("click", sales);
   buscarBoton.addEventListener("click", buscar);
+  logo.addEventListener("click", reset);
+  home.addEventListener("click", reset);
 }
-logo.addEventListener("click", reset);
-home.addEventListener("click", reset);
+
 carrito.addEventListener("click", toggleCarrito);
 vaciar.addEventListener("click", toggleVaciar);
 volver.addEventListener("click", toggleCarrito);
