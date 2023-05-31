@@ -48,7 +48,7 @@ rechazarComprar.addEventListener("click", toggleCompra);
 
 //Creo variables
 const apiUrl = "https://fakestoreapi.com/products";
-//const apiUrl = "./data.json"; En caso de que FakeStoreApi no funcione, usar esta linea
+//const apiUrl = "./data.json"; //En caso de que FakeStoreApi no funcione, usar esta linea
 const products = [];
 const primeraMitad = [];
 const segundaMitad = [];
@@ -59,7 +59,8 @@ if (inputBuscar != null) {
   fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
-      for (let i = 0; i < 20; i++) {
+      console.log(data.length)
+      for (let i = 0; i < data.length ; i++) {
         if (i % 2 == 0) {
           primeraMitad.push(data[i]);
         } else {
