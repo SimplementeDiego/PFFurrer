@@ -59,7 +59,6 @@ if (inputBuscar != null) {
   fetch(apiUrl)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.length)
       for (let i = 0; i < data.length ; i++) {
         if (i % 2 == 0) {
           primeraMitad.push(data[i]);
